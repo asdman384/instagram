@@ -2,7 +2,7 @@ const instagram = require('./lib/instagram');
 const db = require('./db');
 instagram.debug = false;
 
-var tags = ['львов', 'lviv', 'львів'];
+var tags = ['севастополь', 'sevastopol', 'sebastopol'];
 
 db
 .init()
