@@ -15,7 +15,7 @@ function main() {
         instagram.unsubscribe(user[0].id)
         .then(resp => {            
             user[0].update({follow : 0})
-            .then(() => setTimeout(main, 1000*60*3)) // recursive call
+            .then(() => setTimeout(main, 1000*60*4)) // recursive call
         });  
     });
 }
