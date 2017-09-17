@@ -2,7 +2,7 @@ const instagram = require('./lib/instagram');
 const db = require('./db');
 instagram.debug = false;
 
-var tags = ['севастополь', 'sevastopol', 'sebastopol'];
+var tags = ['львов', 'львів', 'lviv', 'lvov'];
 
 db
 .init()
@@ -15,7 +15,7 @@ function main() {
     instagram
     .getNews(`/explore/tags/${tag}/`)
     .then(filter)
-    .then(data => new Promise(resolve => resolve(likeAndSubsribe(data, []))))
+    .then(likeAndSubsribe)
     .then(toSave => db.Users.bulkCreate(toSave))
     .then(() => setTimeout(main, 1000*60*10)) // recursive call
     .catch(e => {
@@ -28,23 +28,31 @@ function main() {
 }
 
 function likeAndSubsribe(nodes, toSave) { 
-    
+
+    toSave = toSave || [];
     var node = nodes.pop();
 
-    if(!node) return toSave;
+    if(!node) return new Promise(resolve => resolve(toSave));
 
-    return instagram.like(node.id)
-            .then(resp => {        
-                return instagram.subscribe(node.owner.id)
-                .then(resp => {            
-                    toSave.push({
-                        id: node.owner.id, 
-                        datetime: + new Date(),
-                        follow: 1
-                    });
-                    return likeAndSubsribe(nodes, toSave);
-                });
-            });
+    return instagram
+    .like(node.id)
+    .then(pause2000)
+    .then(r => instagram.subscribe(node.owner.id))
+    .then(pause2000)
+    .then(r => {        
+        toSave.push({ 
+            id: node.owner.id, 
+            datetime: + new Date(),
+            follow: 1
+        });               
+    })
+    .then(r => likeAndSubsribe(nodes, toSave));    
+}
+
+function pause2000(){
+    return new Promise(function(resolve, reject) {
+        setTimeout(() => resolve('pause done!'), 2000);
+    });
 }
 
 function filter(data) {    
