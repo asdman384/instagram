@@ -5,4 +5,9 @@
    sudo apt-get install -y mc
    sudo apt-get -y git
 2. git clone https://github.com/asdman384/instagram.git   
-3. npm install
+3. rename db example
+4. npm install
+5. node 
+   var i = require('./lib/instagram');
+   i.auth('', '');
+6. start.sh
