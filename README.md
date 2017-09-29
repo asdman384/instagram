@@ -12,3 +12,4 @@
    var i = require('./lib/instagram');
    i.auth('', '');
 6. start.sh
+7. sudo screen -d -m -L node ~/instagram/index.js
