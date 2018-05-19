@@ -25,6 +25,6 @@ export class Graphql {
     hashtag: Hashtag;
 }
 
-export class InstaResp {
+export class InstaFeed {
     graphql: Graphql
 }

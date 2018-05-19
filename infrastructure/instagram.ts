@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { IncomingMessage } from "http";
 import * as https from "https";
-import { InstaResp } from "./types";
+import { InstaFeed } from "./types";
 
 export class Instagram {
     private params = new DefaultParams();
@@ -20,14 +20,14 @@ export class Instagram {
         let params = new DefaultParams();
 
         return this.doRequest(params)
-            .then((result: Response) => { params.headers["cookie"] = result.resp.headers["set-cookie"]; })
+            .then((result: InstaResponse) => { params.headers["cookie"] = result.resp.headers["set-cookie"]; })
             .then(() => {
                 let data = `username=${login}&password=${passw}`;
                 params.method = 'POST';
                 params.path = '/accounts/login/ajax/';
                 params.headers['Content-Length'] = Buffer.byteLength(data);
                 params.headers['x-csrftoken'] = parseToken(params.headers["cookie"]);
-                return this.doRequest(params, data).then((result: Response) => {
+                return this.doRequest(params, data).then((result: InstaResponse) => {
                     fs.writeFile('cookies', JSON.stringify(result.resp.headers["set-cookie"]), { encoding: 'utf-8' }, () => { });
                     return result.data;
                 });
@@ -55,15 +55,13 @@ export class Instagram {
         return this.doRequest(this.params);
     }
 
-    public getNews(explore): Promise<InstaResp> {
+    public getNews(explore): Promise<InstaFeed> {
         this.params.path = explore + '?__a=1';
         this.params['method'] = 'GET';
-        this.isDebug = false;
         return this.doRequest(this.params).then(response => {
-            this.isDebug = true;
-            return new Promise<InstaResp>(function (resolve, reject) {
+            return new Promise<InstaFeed>(function (resolve, reject) {
                 try {
-                    resolve(JSON.parse(response.data) as InstaResp);
+                    resolve(JSON.parse(response.data) as InstaFeed);
                 } catch (e) {
                     reject(e);
                 }
@@ -71,7 +69,7 @@ export class Instagram {
         });
     }
 
-    private doRequest(params: DefaultParams, postData?: any): Promise<Response> {
+    private doRequest(params: DefaultParams, postData?: any): Promise<InstaResponse> {
         return new Promise((resolve, reject) => {
             const req = https.request(params, (resp: IncomingMessage) => {
                 var data = '';
@@ -79,7 +77,7 @@ export class Instagram {
                 resp.on('end', () => {
                     this.debug(`Instagram.doRequest: ${params.path} : ${resp.statusCode} \n\tdata: ${data}`, resp.statusCode != 200);
                     if (resp.statusCode != 200)
-                        reject(resp);
+                        reject({ data, resp });
                     resolve({ data, resp });
                 });
             });
@@ -111,7 +109,7 @@ function parseToken(cookies) {
     return token;
 }
 
-class Response {
+export class InstaResponse {
     data: string;
     resp: IncomingMessage;
 }
