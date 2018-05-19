@@ -10,4 +10,4 @@
 4. sudo npm install
 5. node 
 6. start.sh
-7. sudo screen -d -m -L node ~/instagram/index.js
+7. sudo screen -d -m -L node -r ts-node/register ~/instagram/demons/subscriber/subscriber.ts
