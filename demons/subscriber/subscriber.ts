@@ -56,6 +56,8 @@ function main() {
 
             if (error && error.resp && error.resp.statusCode === 403 && error.data == "Please wait a few minutes before you try again.") {
                 state.timerId = setTimeout(main, 1000 * 60 * 60) // resume after 1 hour
+            } else if (error && error.resp && error.resp.statusCode === 400 && error.data == "This action was blocked. Please try again later.") {
+                state.timerId = setTimeout(main, 1000 * 60 * 10)// resume after 10 min
             } else {
                 state.running = false;
             }
