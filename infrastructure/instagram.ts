@@ -4,6 +4,7 @@ import { IncomingMessage } from "http";
 
 export class Instagram {
     private params = new DefaultParams();
+    public isDebug: boolean = false;
 
     constructor(pathToCookies?: string) {
         if (pathToCookies)
@@ -13,8 +14,6 @@ export class Instagram {
             } else
                 console.error("try to login");
     }
-
-    private isDebug: boolean = false;
 
     public auth(login: string, passw: string) {
         let params = new DefaultParams();
