@@ -1,6 +1,7 @@
-import * as https from "https";
 import * as fs from "fs";
 import { IncomingMessage } from "http";
+import * as https from "https";
+import { InstaResp } from "./types";
 
 export class Instagram {
     private params = new DefaultParams();
@@ -54,29 +55,29 @@ export class Instagram {
         return this.doRequest(this.params);
     }
 
-    public getNews(explore) {
+    public getNews(explore): Promise<InstaResp> {
         this.params.path = explore + '?__a=1';
         this.params['method'] = 'GET';
-
-        return this.doRequest(this.params)
-            .then((result: Response) => {
-                return new Promise(function (resolve, reject) {
-                    try {
-                        resolve(JSON.parse(result.data));
-                    } catch (e) {
-                        reject(e);
-                    }
-                })
-            });
+        this.isDebug = false;
+        return this.doRequest(this.params).then(response => {
+            this.isDebug = true;
+            return new Promise<InstaResp>(function (resolve, reject) {
+                try {
+                    resolve(JSON.parse(response.data) as InstaResp);
+                } catch (e) {
+                    reject(e);
+                }
+            })
+        });
     }
 
-    private doRequest(params, postData?: any) {
+    private doRequest(params: DefaultParams, postData?: any): Promise<Response> {
         return new Promise((resolve, reject) => {
-            const req = https.request(params, resp => {
+            const req = https.request(params, (resp: IncomingMessage) => {
                 var data = '';
                 resp.on('data', chunk => data += chunk);
                 resp.on('end', () => {
-                    this.debug(`_doRequest: ${params.path} : ${resp.statusCode} \n\tdata: ${data}`, resp.statusCode != 200);
+                    this.debug(`Instagram.doRequest: ${params.path} : ${resp.statusCode} \n\tdata: ${data}`, resp.statusCode != 200);
                     if (resp.statusCode != 200)
                         reject(resp);
                     resolve({ data, resp });

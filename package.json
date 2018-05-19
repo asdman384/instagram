@@ -1,5 +1,5 @@
 {
-  "name": "insta",
+  "name": "instagram",
   "version": "1.0.0",
   "description": "instagram",
   "main": "index.js",
@@ -12,10 +12,10 @@
     "typescript": "^2.8.3"
   },
   "devDependencies": {
+    "@types/express": "^4.11.1",
     "@types/node": "^10.1.1",
     "@types/sequelize": "^4.27.18",
     "nodemon": "^1.11.0",
-    "sqlite3": "^4.0.0",
     "ts-node": "^6.0.3",
     "typescript-tools": "^0.3.1"
   },
