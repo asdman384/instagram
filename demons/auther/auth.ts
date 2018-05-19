@@ -16,11 +16,11 @@ demon.post('/login', function (req, res) {
 });
 
 demon.get('/logout', (req, res) => {
-    fs.unlink('../../cookies', () => { })
-    res.json({ status: !fs.existsSync('../../cookies') })
+    fs.unlink('cookies', () => { })
+    res.json({ status: !fs.existsSync('cookies') })
 })
 
 demon.listen(8083, (err) => {
     if (err) return console.log(err)
-    return console.log(`server is listening on 8083`)
+    return console.log(`auther is listening on 8083`)
 })

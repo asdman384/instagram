@@ -28,7 +28,7 @@ export class Instagram {
                 params.headers['Content-Length'] = Buffer.byteLength(data);
                 params.headers['x-csrftoken'] = parseToken(params.headers["cookie"]);
                 return this.doRequest(params, data).then((result: InstaResponse) => {
-                    fs.writeFile('../cookies', JSON.stringify(result.resp.headers["set-cookie"]), { encoding: 'utf-8' }, () => { });
+                    fs.writeFile('cookies', JSON.stringify(result.resp.headers["set-cookie"]), { encoding: 'utf-8' }, () => { });
                     return result.data;
                 });
             })

@@ -35,9 +35,9 @@ demon.get('/stop', (req, res) => {
     res.json({ state: state })
 })
 
-demon.listen(3001, (err) => {
+demon.listen(8081, (err) => {
     if (err) return console.log(err)
-    return console.log(`server is listening on 3001`)
+    return console.log(`subscriber is listening on 8081`)
 })
 
 function main() {
