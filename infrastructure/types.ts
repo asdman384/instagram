@@ -28,3 +28,17 @@ export class Graphql {
 export class InstaFeed {
     graphql: Graphql
 }
+
+export class State {
+    follow: {
+        running: boolean,
+        tags: string[],
+        timout: number,
+        timerId: any/* NodeJS.Timer*/
+    }
+    unfollow: {
+        running: boolean,
+        timout: number,
+        timerId: any/* NodeJS.Timer*/
+    }
+}

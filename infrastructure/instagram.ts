@@ -13,7 +13,7 @@ export class Instagram {
                 this.params.headers.cookie = JSON.parse(fs.readFileSync(pathToCookies, 'utf8'));
                 this.params.headers['x-csrftoken'] = parseToken(this.params.headers.cookie);
             } else
-                console.error("try to login");
+                console.error("Cookies not found, try to login");
     }
 
     public auth(login: string, passw: string): Promise<string> {
@@ -34,14 +34,14 @@ export class Instagram {
             })
     }
 
-    public unsubscribe(id) {
+    public unfollow(id) {
         this.params.path = `/web/friendships/${id}/unfollow/`;
         this.params['method'] = 'POST';
 
         return this.doRequest(this.params);
     }
 
-    public subscribe(id) {
+    public follow(id) {
         this.params.path = `/web/friendships/${id}/follow/`;
         this.params['method'] = 'POST';
 
@@ -71,32 +71,31 @@ export class Instagram {
 
     private doRequest(params: DefaultParams, postData?: any): Promise<InstaResponse> {
         return new Promise((resolve, reject) => {
+
             const req = https.request(params, (resp: IncomingMessage) => {
                 var data = '';
                 resp.on('data', chunk => data += chunk);
                 resp.on('end', () => {
-                    this.debug(`Instagram.doRequest: ${params.path} : ${resp.statusCode} \n\tdata: ${data}`, resp.statusCode != 200);
+                    this.debug(`Instagram.doRequest: ${params.path} : ${resp.statusCode} \n\tdata:[${data}]`, resp.statusCode != 200);
                     if (resp.statusCode != 200)
                         reject({ data, resp });
-                    resolve({ data, resp });
+                    else
+                        resolve({ data, resp });
                 });
             });
-            req.on('error', function (err) {
-                reject(err);
-            });
-            if (postData) {
+
+            req.on('error', err => reject(err));
+
+            if (postData)
                 req.write(postData);
-            }
+
             req.end();
         });
     }
 
     private debug(message, assert) {
-        if (!assert && this.isDebug) {
-            console.log(`${new Date().toLocaleString()}`, message);
-        } else if (assert) {
-            console.log(`${new Date().toLocaleString()}`, message);
-        }
+        if (assert || this.isDebug)
+            console.log(`debug: ${new Date().toLocaleString()}`, message);
     }
 }
 
