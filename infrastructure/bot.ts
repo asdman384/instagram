@@ -83,7 +83,7 @@ export class Bot {
             .then(() => this._state.follow.timout)
             .catch(this.errors)
             .then(timeout => { // finally
-                if (timeout)
+                if (~timeout)
                     this._state.follow.timerId = setTimeout(this.follow.bind(this), timeout); // recursive call
                 else
                     throw new Error('see logs');
@@ -104,7 +104,7 @@ export class Bot {
             .then(() => this._state.unfollow.timout)
             .catch(this.errors)
             .then(timeout => { // finally
-                if (timeout)
+                if (~timeout)
                     this._state.unfollow.timerId = setTimeout(this.unfollow.bind(this), timeout); // recursive call
                 else
                     throw new Error('see logs');

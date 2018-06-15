@@ -66,7 +66,7 @@ var Bot = /** @class */ (function () {
             .then(this.likeAndSubsribe.bind(this))
             .then(function () { return _this._state.follow.timout; })["catch"](this.errors)
             .then(function (timeout) {
-            if (timeout)
+            if (~timeout)
                 _this._state.follow.timerId = setTimeout(_this.follow.bind(_this), timeout); // recursive call
             else
                 throw new Error('see logs');
@@ -85,7 +85,7 @@ var Bot = /** @class */ (function () {
             .then(function (user) { return user.update({ follow: 0 }); })
             .then(function () { return _this._state.unfollow.timout; })["catch"](this.errors)
             .then(function (timeout) {
-            if (timeout)
+            if (~timeout)
                 _this._state.unfollow.timerId = setTimeout(_this.unfollow.bind(_this), timeout); // recursive call
             else
                 throw new Error('see logs');
