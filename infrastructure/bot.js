@@ -69,7 +69,7 @@ var Bot = /** @class */ (function () {
             if (~timeout)
                 _this._state.follow.timerId = setTimeout(_this.follow.bind(_this), timeout); // recursive call
             else
-                throw new Error('see logs');
+                console.log("stop bot");
         });
     };
     Bot.prototype.unfollow = function () {
@@ -88,7 +88,7 @@ var Bot = /** @class */ (function () {
             if (~timeout)
                 _this._state.unfollow.timerId = setTimeout(_this.unfollow.bind(_this), timeout); // recursive call
             else
-                throw new Error('see logs');
+                console.log("stop bot");
         });
     };
     Bot.prototype.likeAndSubsribe = function (nodes) {

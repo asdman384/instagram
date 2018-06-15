@@ -86,7 +86,7 @@ export class Bot {
                 if (~timeout)
                     this._state.follow.timerId = setTimeout(this.follow.bind(this), timeout); // recursive call
                 else
-                    throw new Error('see logs');
+                    console.log("stop bot");
             })
     }
 
@@ -107,7 +107,7 @@ export class Bot {
                 if (~timeout)
                     this._state.unfollow.timerId = setTimeout(this.unfollow.bind(this), timeout); // recursive call
                 else
-                    throw new Error('see logs');
+                    console.log("stop bot");
             })
     }
 
